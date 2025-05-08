@@ -1,150 +1,132 @@
-/* Reset básico */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  body {
-    font-family: 'Segoe UI', sans-serif;
-    background: url('./fotos/fotito.jpg') no-repeat center center fixed;
-    background-size: cover;
-    color: #333;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    padding-top: 4rem;
-    backdrop-filter: brightness(0.9);
-  }
-  
-  form {
-    display: flex;
-    gap: 1rem;
-    margin-bottom: 2rem;
-    z-index: 1;
-  }
-  
-  input[type="text"] {
-    padding: 0.5rem 1rem;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    width: 250px;
-    font-size: 1rem;
-  }
-  
-  button {
-    padding: 0.5rem 1.2rem;
-    background-color: #4caf50;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: background-color 0.3s;
-  }
-  
-  button:hover {
-    background-color: #45a049;
-  }
-  
-  /* Botón estilizado moderno */
-  .boton, .boton:visited {
-    background: linear-gradient(to bottom, #2daebf, #007d9a);
-    display: inline-block;
-    padding: 0.6rem 1.4rem;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    text-shadow: 0 -1px 1px rgba(0,0,0,0.2);
-    border: none;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background 0.3s, transform 0.2s;
-  }
-  
-  .boton:hover {
-    background: linear-gradient(to bottom, #009bb8, #005c75);
-    transform: scale(1.05);
-  }
-  
-  .boton:active {
-    transform: scale(0.98);
-  }
-  
-  #time {
-    background-color: white;
-    padding: 2rem 3rem;
-    border-radius: 20px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-    text-align: center;
-    margin-bottom: 2rem;
-    width: 450px; /* Más ancho */
-    max-width: 90%;
-    z-index: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  
-  #taskName {
-    display: block;
-    font-size: 1.25rem;
-    margin-bottom: 0.5rem;
-    font-weight: bold;
-  }
-  
-  #value {
-    font-size: 2.5rem;
-    font-weight: bold;
-    color: #333;
-  }
-  
-  #tasks {
-    width: 100%;
-    max-width: 500px;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    z-index: 1;
-  }
-  
-  .task {
-    background-color: white;
-    padding: 1rem;
-    border-radius: 12px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .task .title {
-    font-size: 1.1rem;
-  }
-  
-  .task .done {
-    color: #4caf50;
-    font-weight: bold;
-  }
-  
-  .task button.start-button {
-    background-color: #2196f3;
-    border-radius: 8px;
-  }
-  
-  .task button.start-button:hover {
-    background-color: #1976d2;
-  }
-  
-  .edit-input {
-    width: 100%;
-    font-size: 1em;
-    padding: 2px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-image: url('fotos/fotito.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: #333;
+}
+
+#app {
+  max-width: 800px;
+  margin: 40px auto;
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+#time {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+#value {
+  font-size: 48px;
+  font-weight: bold;
+  background: white;
+  display: inline-block;
+  padding: 10px 25px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+}
+
+#taskName {
+  margin-top: 10px;
+  font-size: 20px;
+  font-style: italic;
+}
+
+.tasks-container h2 {
+  margin-top: 30px;
+  margin-bottom: 10px;
+  font-size: 24px;
+  color: #222;
+}
+
+.task-box {
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.task {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.task:last-child {
+  border-bottom: none;
+}
+
+.task .title {
+  flex: 1;
+  margin: 0 15px;
+}
+
+.task.done .title {
+  text-decoration: line-through;
+  color: #888;
+}
+
+.timestamp {
+  font-size: 12px;
+  color: #777;
+  margin-top: 5px;
+}
+
+.form input[type="text"] {
+  width: 70%;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+}
+
+.boton.blue {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.boton.blue:hover {
+  background-color: #0056b3;
+}
+
+button.delete-button, button.start-button {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+button.start-button {
+  background-color: #2ecc71;
+}
+
+button.start-button:hover {
+  background-color: #27ae60;
+}
+
+button.delete-button:hover {
+  background-color: #c0392b;
+}
+
+.edit-input {
+  width: 100%;
+  padding: 4px;
+  font-size: 14px;
 }
