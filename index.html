@@ -12,12 +12,28 @@
       <div id="value">00:00</div>
       <div id="taskName"></div>
     </div>
+    <div class="settings">
+        <h3>Personalizar Temporizador</h3>
+        <label for="workTime">Minutos de trabajo:</label>
+        <input type="number" id="workTime" min="1" value="25" />
+        <label for="breakTime">Minutos de descanso:</label>
+        <input type="number" id="breakTime" min="1" value="5" />
+      </div>      
     <div class="tasks-container">
       <div class="form">
-        <form id="form">
+        <<form id="form">
           <input type="text" id="itTask" placeholder="Nueva tarea" required />
+        
+          <select id="priority">
+            <option value="alta">Alta</option>
+            <option value="media" selected>Media</option>
+            <option value="baja">Baja</option>
+          </select>
+
+          <input type="date" id="dueDate" />
+        
           <input type="submit" id="bAdd" class="boton blue" value="Agregar Tarea" />
-        </form>
+        </form>         
       </div>
 
       <!-- Tareas activas -->

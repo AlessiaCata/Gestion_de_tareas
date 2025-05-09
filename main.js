@@ -22,20 +22,32 @@ form.addEventListener('submit', e => {
 });
 
 function createTask(value) {
+  const priorityValue = document.querySelector('#priority').value;
+  const dueDateValue = document.querySelector('#dueDate').value;
+
   const newTask = {
     id: (Math.random() * 100).toString(36).slice(3),
     title: value,
+    priority: priorityValue,
+    dueDate: dueDateValue,
     completed: false,
     completedAt: null
   };
   tasks.unshift(newTask);
 }
 
+function getPriorityOrder(priority) {
+  return priority === 'alta' ? 1 : priority === 'media' ? 2 : 3;
+}
+
 function renderTasks() {
   const tasksContainer = document.querySelector('#tasks');
   const completedContainer = document.querySelector('#completedTasks');
 
-  const activeTasks = tasks.filter(task => !task.completed);
+  const activeTasks = tasks
+    .filter(task => !task.completed)
+    .sort((a, b) => getPriorityOrder(a.priority) - getPriorityOrder(b.priority));
+
   const completedTasks = tasks.filter(task => task.completed);
 
   tasksContainer.innerHTML = activeTasks.map(task => `
@@ -43,7 +55,10 @@ function renderTasks() {
       <div class="completed">
         <button class="start-button" data-id="${task.id}">Start</button>
       </div>
-      <div class="title" data-id="${task.id}" ondblclick="editTaskTitle(this)">${task.title}</div>
+      <div class="title ${'priority-' + task.priority}" data-id="${task.id}" ondblclick="editTaskTitle(this)">
+        ${task.title} <span>(${task.priority})</span>
+        ${task.dueDate ? `<div class="due-date">Vence: ${task.dueDate}</div>` : ''}
+      </div>
       <div>
         <button class="delete-button" data-id="${task.id}">Eliminar</button>
       </div>
@@ -52,7 +67,10 @@ function renderTasks() {
 
   completedContainer.innerHTML = completedTasks.map(task => `
     <div class="task done">
-      <div class="title">${task.title}</div>
+      <div class="title">
+        ${task.title} <span>(${task.priority})</span>
+        ${task.dueDate ? `<div class="due-date">Vence: ${task.dueDate}</div>` : ''}
+      </div>
       <div class="timestamp">✔️ ${task.completedAt}</div>
       <div>
         <button class="delete-button" data-id="${task.id}">Eliminar</button>
@@ -120,7 +138,8 @@ function saveEditedTitle(id, newTitle) {
 }
 
 function startButtonHandler(id){
-  time = 3; // 25*60 para tiempo real
+  const workMinutes = parseInt(document.querySelector('#workTime').value);
+  time = workMinutes * 60;
   current = id;
   const taskIndex = tasks.findIndex(task => task.id === id);
   taskName.textContent = tasks[taskIndex].title;
@@ -145,7 +164,8 @@ function timeHandler(id){
 }
 
 function startBreak(){
-  time = 3; // 5*60 para tiempo real
+  const breakMinutes = parseInt(document.querySelector('#breakTime').value);
+  time = breakMinutes * 60;
   taskName.textContent = 'Break';
   timerBreak = setInterval(() => {
     timerBreakHandler();
