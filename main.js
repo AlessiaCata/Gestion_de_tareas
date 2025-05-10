@@ -3,12 +3,15 @@ let time = 0;
 let timer = null;
 let timerBreak = null;
 let current = null;
+let isPaused = false;
 
 const bAdd = document.querySelector('#bAdd');
 const itTask = document.querySelector('#itTask');
 const form = document.querySelector('#form');
 const taskName = document.querySelector('#taskName');
+const pauseResumeBtn = document.querySelector('#pauseResumeBtn');
 
+loadTasks();
 renderTime();
 renderTasks();
 
@@ -19,6 +22,11 @@ form.addEventListener('submit', e => {
     itTask.value = '';
     renderTasks();
   }
+});
+
+pauseResumeBtn.addEventListener('click', () => {
+  isPaused = !isPaused;
+  pauseResumeBtn.textContent = isPaused ? '▶ Reanudar' : '⏸ Pausar';
 });
 
 function createTask(value) {
@@ -34,6 +42,7 @@ function createTask(value) {
     completedAt: null
   };
   tasks.unshift(newTask);
+  saveTasks();
 }
 
 function getPriorityOrder(priority) {
@@ -99,10 +108,25 @@ function renderTasks() {
 function deleteTask(id) {
   const index = tasks.findIndex(task => task.id === id);
   if (index !== -1) {
+    // Si la tarea que se elimina está en curso, detener temporizador
+    if (current === id) {
+      clearInterval(timer);
+      clearInterval(timerBreak);
+      timer = null;
+      timerBreak = null;
+      current = null;
+      isPaused = false;
+      pauseResumeBtn.style.display = 'none';
+      taskName.textContent = '';
+      renderTime();
+    }
+
     tasks.splice(index, 1);
+    saveTasks();
     renderTasks();
   }
 }
+
 
 function editTaskTitle(element) {
   const id = element.getAttribute('data-id');
@@ -133,6 +157,7 @@ function saveEditedTitle(id, newTitle) {
   const index = tasks.findIndex(task => task.id === id);
   if (index !== -1 && newTitle.trim() !== '') {
     tasks[index].title = newTitle.trim();
+    saveTasks();
     renderTasks();
   }
 }
@@ -141,6 +166,9 @@ function startButtonHandler(id){
   const workMinutes = parseInt(document.querySelector('#workTime').value);
   time = workMinutes * 60;
   current = id;
+  isPaused = false;
+  pauseResumeBtn.textContent = '⏸ Pausar';
+  pauseResumeBtn.style.display = 'inline';
   const taskIndex = tasks.findIndex(task => task.id === id);
   taskName.textContent = tasks[taskIndex].title;
 
@@ -150,6 +178,7 @@ function startButtonHandler(id){
 }
 
 function timeHandler(id){
+  if (isPaused) return;
   time--;
   renderTime();
 
@@ -167,12 +196,15 @@ function startBreak(){
   const breakMinutes = parseInt(document.querySelector('#breakTime').value);
   time = breakMinutes * 60;
   taskName.textContent = 'Break';
+  isPaused = false;
+  pauseResumeBtn.textContent = '⏸ Pausar';
   timerBreak = setInterval(() => {
     timerBreakHandler();
   }, 1000);
 }
 
 function timerBreakHandler(){
+  if (isPaused) return;
   time--;
   renderTime();
 
@@ -182,6 +214,7 @@ function timerBreakHandler(){
     timerBreak = null;
     playSound();
     taskName.textContent = "";
+    pauseResumeBtn.style.display = 'none';
     renderTasks();
   }
 }
@@ -198,9 +231,21 @@ function markCompleted(id){
   const taskIndex = tasks.findIndex(task => task.id === id);
   tasks[taskIndex].completed = true;
   tasks[taskIndex].completedAt = new Date().toLocaleString();
+  saveTasks();
 }
 
 function playSound() {
   const audio = new Audio('./sounds/sonido.mp3');
   audio.play();
+}
+
+function saveTasks() {
+  localStorage.setItem('tasks', JSON.stringify(tasks));
+}
+
+function loadTasks() {
+  const saved = localStorage.getItem('tasks');
+  if (saved) {
+    tasks.push(...JSON.parse(saved));
+  }
 }
